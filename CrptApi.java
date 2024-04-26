@@ -28,28 +28,29 @@ public class CrptApi {
                 .ownerInn("string")
                 .participantInn("string")
                 .producerInn("string")
-                .productionDate("2020-01-23")
+                .productionDate(LocalDate.of(2020, 1, 23))
                 .productionType("string")
                 .products(new ArrayList<>() {{
-                    HonestSignApi.Root.Product.builder()
+                    add(HonestSignApi.Root.Product.builder()
                             .certificateDocument("string")
-                            .certificateDocumentDate("2020-01-23")
+                            .certificateDocumentDate(LocalDate.of(2020, 1, 23))
                             .certificateDocumentNumber("string")
                             .ownerInn("string")
                             .producerInn("string")
-                            .productionDate("20202-01-23")
+                            .productionDate(LocalDate.of(2020, 1, 23))
                             .tnvedCode("string")
                             .uitCode("string")
                             .uituCode("string")
-                            .build();
+                            .build());
                 }})
-                .regDate("2020-01-23")
+                .regDate(LocalDate.of(2020, 1, 23))
                 .regNumber("string")
                 .build();
         HonestSignApi honestSignApi = new HonestSignApi(10, TimeUnit.SECONDS);
         honestSignApi.createNewDoc(newDoc);
     }
 
+    @Getter
     public static class HonestSignApi {
         private final String USERNAME = "userName";
         private final String PASSWORD = "password";
@@ -70,6 +71,7 @@ public class CrptApi {
             try {
                 semaphore.acquire();
                 ObjectMapper jsonMapper = new ObjectMapper();
+                jsonMapper.registerModule(new JavaTimeModule());
                 HttpClient client = HttpClient.newBuilder()
                         .authenticator(new Authenticator() {
                             @Override
@@ -116,7 +118,7 @@ public class CrptApi {
             private String producerInn;
 
             @JsonProperty("production_date")
-            private String productionDate;
+            private LocalDate productionDate;
 
             @JsonProperty("production_type")
             private String productionType;
@@ -124,7 +126,7 @@ public class CrptApi {
             private ArrayList<Product> products;
 
             @JsonProperty("reg_date")
-            private String regDate;
+            private LocalDate regDate;
 
             @JsonProperty("reg_number")
             private String regNumber;
@@ -145,7 +147,7 @@ public class CrptApi {
                 private String certificateDocument;
 
                 @JsonProperty("certificate_document_date")
-                private String certificateDocumentDate;
+                private LocalDate certificateDocumentDate;
 
                 @JsonProperty("certificate_document_number")
                 private String certificateDocumentNumber;
@@ -157,7 +159,7 @@ public class CrptApi {
                 private String producerInn;
 
                 @JsonProperty("production_date")
-                private String productionDate;
+                private LocalDate productionDate;
 
                 @JsonProperty("tnved_code")
                 private String tnvedCode;
